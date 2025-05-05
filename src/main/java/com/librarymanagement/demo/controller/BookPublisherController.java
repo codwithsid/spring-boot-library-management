@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/publishers")
+@RequestMapping("/api.librarymanagement.com/publisher")
 public class BookPublisherController {
-
+    @Autowired
     private final BookPublisherService bookPublisherService;
 
     @Autowired

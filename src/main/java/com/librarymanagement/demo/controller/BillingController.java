@@ -2,17 +2,18 @@ package com.librarymanagement.demo.controller;
 
 import com.librarymanagement.demo.model.Billing;
 import com.librarymanagement.demo.service.BillingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/billings")
+@RequestMapping("/api.librarymanagement.com/billing")
 public class BillingController {
-
+    @Autowired
     private final BillingService billingService;
-
+    @Autowired
     public BillingController(BillingService billingService) {
         this.billingService = billingService;
     }

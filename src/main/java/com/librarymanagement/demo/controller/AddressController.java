@@ -2,17 +2,18 @@ package com.librarymanagement.demo.controller;
 
 import com.librarymanagement.demo.model.Address;
 import com.librarymanagement.demo.service.AddressService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/addresses")
+@RequestMapping("/api.librarymanagement.com/address")
 public class AddressController {
-
+    @Autowired
     private final AddressService addressService;
-
+    @Autowired
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }

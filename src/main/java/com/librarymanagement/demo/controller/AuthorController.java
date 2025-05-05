@@ -2,17 +2,18 @@ package com.librarymanagement.demo.controller;
 
 import com.librarymanagement.demo.model.Author;
 import com.librarymanagement.demo.service.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/api.librarymanagement.com/author")
 public class AuthorController {
-
+    @Autowired
     private final AuthorService authorService;
-
+    @Autowired
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }

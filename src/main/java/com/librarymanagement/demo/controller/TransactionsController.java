@@ -2,17 +2,18 @@ package com.librarymanagement.demo.controller;
 
 import com.librarymanagement.demo.model.Transactions;
 import com.librarymanagement.demo.service.TransactionsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/api.librarymanagement.com/transaction")
 public class TransactionsController {
-
+    @Autowired
     private final TransactionsService transactionsService;
-
+    @Autowired
     public TransactionsController(TransactionsService transactionsService) {
         this.transactionsService = transactionsService;
     }

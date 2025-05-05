@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api.librarymanagement.com/user")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
+    @Autowired
+    public UserController(UserService userService){
+        this.userService=userService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
