@@ -47,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     public void markNotificationAsRead(int notificationId, int userId) {
-        Notification notification = notificationRepository.findByIdAndUserId(notificationId, userId)
+        Notification notification = notificationRepository.findByNotificationIdAndUser_UserId(notificationId, userId)
                 .orElseThrow(() -> new NotificationNotFoundException("Notification not found with ID " + notificationId));
         notification.setRead(true);
         notificationRepository.save(notification);
@@ -55,12 +55,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotificationsForUser(int userId, boolean isRead) {
-        return notificationRepository.findByUserIdAndIsRead(userId, isRead);
+        return notificationRepository.findByUser_UserIdAndIsRead(userId, isRead);
     }
 
     @Override
     public List<Notification> getNotificationsByType(int userId, String notificationType) {
-        return notificationRepository.findByUserIdAndNotificationType(userId, notificationType);
+        return notificationRepository.findByUser_UserIdAndNotificationType(userId, notificationType);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.librarymanagement.demo.model.User;
 import com.librarymanagement.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController

@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -13,19 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId;
 
     private String title;
     private String isbn;
-    private LocalDate publishDate;
+    private LocalDateTime publishDate;
     private int totalCopies;
     private int availableCopies;
     private String category;
     private String language;
     private double price;
     private boolean isAvailable;
+
     @Column(name = "borrow_count")
     private int borrowCount;
 
@@ -37,6 +38,24 @@ public class Book {
     @JoinColumn(name = "publisher_id")
     private BookPublisher publisher;
 
+    @ManyToOne
+    @JoinColumn(name = "borrowed_by")
+    private User borrowedBy;
+
+    private LocalDateTime returnDate;
+
+    private LocalDateTime borrowDate;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Transactions> transactions;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Recommendation> recommendations;
 }
+
