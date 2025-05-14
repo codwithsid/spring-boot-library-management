@@ -1,15 +1,18 @@
 package com.librarymanagement.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +29,11 @@ public class User {
     private String role;
     private String profileImageUrl;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Address address;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonManagedReference
+    @ToString.Exclude
+    private List<Address> addresses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Transactions> borrowedBooks;
+    private List<Transactions> transactions;
 }

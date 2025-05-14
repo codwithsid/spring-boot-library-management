@@ -5,9 +5,9 @@ import com.librarymanagement.demo.model.Address;
 import java.util.List;
 
 public interface AddressService {
-    Address createAddress(Address address);
-    Address getAddressById(int id);
-    List<Address> getAllAddresses();
-    Address updateAddress(int id, Address updatedAddress);
-    void deleteAddress(int id);
+    Address save(Address address);
+    Address retrieve(int id);
+    List<Address> retrieveAll();
+    Address update(Address updatedAddress);
+    void delete(int id);
 }

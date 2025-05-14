@@ -1,11 +1,17 @@
 package com.librarymanagement.demo.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +26,8 @@ public class Book {
     private String language;
     private double price;
     private boolean isAvailable;
+    @Column(name = "borrow_count")
+    private int borrowCount;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -28,4 +36,7 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "publisher_id")
     private BookPublisher publisher;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Transactions> transactions;
 }

@@ -2,51 +2,55 @@ package com.librarymanagement.demo.controller;
 
 import com.librarymanagement.demo.model.Author;
 import com.librarymanagement.demo.service.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api.librarymanagement.com/author")
+@RequestMapping("/api/library-management/v1/author")
 public class AuthorController {
-    @Autowired
+
     private final AuthorService authorService;
-    @Autowired
+
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }
 
     @PostMapping
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
-        return ResponseEntity.ok(authorService.addAuthor(author));
+    public ResponseEntity<Author> save(@RequestBody Author author) {
+        Author savedAuthor = authorService.save(author);
+        return ResponseEntity.ok(savedAuthor);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable int id) {
-        return ResponseEntity.ok(authorService.getAuthorById(id));
+    public ResponseEntity<Author> retrieve(@PathVariable int id) {
+        Author author = authorService.retrieve(id);
+        return ResponseEntity.ok(author);
     }
 
     @GetMapping
-    public ResponseEntity<List<Author>> getAllAuthors() {
-        return ResponseEntity.ok(authorService.getAllAuthors());
+    public ResponseEntity<List<Author>> retrieveAll() {
+        List<Author> authors = authorService.retrieveAll();
+        return ResponseEntity.ok(authors);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable int id, @RequestBody Author author) {
+    public ResponseEntity<Author> update(@PathVariable int id, @RequestBody Author author) {
         author.setAuthorId(id);
-        return ResponseEntity.ok(authorService.updateAuthor(author));
+        Author updatedAuthor = authorService.update(author);
+        return ResponseEntity.ok(updatedAuthor);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable int id) {
-        authorService.deleteAuthor(id);
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        authorService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Author>> searchAuthorByName(@RequestParam String name) {
-        return ResponseEntity.ok(authorService.searchAuthorsByName(name));
+    public ResponseEntity<List<Author>> search(@RequestParam String firstName,@RequestParam String lastName) {
+        List<Author> authors = authorService.searchByName(firstName,lastName);
+        return ResponseEntity.ok(authors);
     }
 }

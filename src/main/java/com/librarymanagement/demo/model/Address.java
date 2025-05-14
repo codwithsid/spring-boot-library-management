@@ -1,12 +1,14 @@
 package com.librarymanagement.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,10 @@ public class Address {
     private String landmark;
     private String addressType;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")  // Foreign key column in Address table
+    @JsonBackReference
+    @ToString.Exclude
+    private User user;  // Many addresses belong to one user
 }

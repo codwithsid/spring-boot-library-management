@@ -4,53 +4,64 @@ import com.librarymanagement.demo.exception.authorException.AuthorNotFoundExcept
 import com.librarymanagement.demo.model.Author;
 import com.librarymanagement.demo.repository.AuthorRepository;
 import com.librarymanagement.demo.service.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository authorRepository;
-
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Override
-    public Author addAuthor(Author author) {
+    public Author save(Author author) {
         return authorRepository.save(author);
     }
 
     @Override
-    public Author getAuthorById(int authorId) {
-        return authorRepository.findById(authorId)
-                .orElseThrow(() -> new AuthorNotFoundException("Author not found with ID: " + authorId));
+    public Author retrieve(int id) {
+        return authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException("Author not found with ID: " + id));
     }
 
     @Override
-    public List<Author> getAllAuthors() {
+    public List<Author> retrieveAll() {
         return authorRepository.findAll();
     }
 
     @Override
-    public Author updateAuthor(Author author) {
+    public Author update(Author author) {
         if (!authorRepository.existsById(author.getAuthorId())) {
             throw new AuthorNotFoundException("Cannot update non-existing author with ID: " + author.getAuthorId());
         }
         return authorRepository.save(author);
     }
 
+
     @Override
-    public void deleteAuthor(int authorId) {
-        if (!authorRepository.existsById(authorId)) {
-            throw new AuthorNotFoundException("Cannot delete non-existing author with ID: " + authorId);
-        }
-        authorRepository.deleteById(authorId);
+    public void delete(int id) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException("Author not found with ID: " + id));
+        authorRepository.delete(author);
     }
 
     @Override
-    public List<Author> searchAuthorsByName(String authorName) {
-        return authorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(authorName, authorName);
+    public List<Author> searchByName(String firstName, String lastName) {
+//        List<Author> authors = authorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName);
+//        if (authors.isEmpty()) {
+//            throw new AuthorNotFoundException("Author not found with name: " + firstName + " " + lastName);
+//        }
+//        return authors;
+            return Optional.of(authorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName))
+                    .filter(authors -> !authors.isEmpty())
+                    .orElseThrow(() -> new AuthorNotFoundException("Author not found with name: " + firstName + " " + lastName));
+
+
     }
+
+
+
 }

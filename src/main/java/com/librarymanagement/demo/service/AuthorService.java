@@ -5,10 +5,10 @@ import com.librarymanagement.demo.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Author addAuthor(Author author);
-    Author getAuthorById(int authorId);
-    List<Author> getAllAuthors();
-    Author updateAuthor(Author author);
-    void deleteAuthor(int authorId);
-    List<Author> searchAuthorsByName(String authorName);
+    Author save(Author author);
+    Author retrieve(int authorId);
+    List<Author> retrieveAll();
+    Author update(Author author);
+    void delete(int authorId);
+    List<Author> searchByName(String firstName,String lastName);
 }

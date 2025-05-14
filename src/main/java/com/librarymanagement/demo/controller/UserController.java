@@ -1,63 +1,68 @@
 package com.librarymanagement.demo.controller;
 
-
-import com.librarymanagement.demo.exception.userException.UserNotFoundException;
+import com.librarymanagement.demo.model.Address;
 import com.librarymanagement.demo.model.User;
 import com.librarymanagement.demo.service.UserService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api.librarymanagement.com/user")
+@RequestMapping("/api/library-management/v1/user")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
-    @Autowired
-    public UserController(UserService userService){
-        this.userService=userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-            if (user.getAddress() != null) {
-                user.getAddress().setUser(user);
+    @PostMapping
+    public ResponseEntity<User> save(@RequestBody User user) {
+        if (user.getAddresses() != null) {
+            for (Address address : user.getAddresses()) {
+                address.setUser(user);
             }
-        userService.registerUser(user);
-
-        return ResponseEntity.ok("✅ User registered successfully!");
+        }
+        User savedUser = userService.save(user);
+        return ResponseEntity.ok(savedUser);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable int id) throws UserNotFoundException {
-        User user = userService.getUserById(id);
+    public ResponseEntity<User> retrieve(@PathVariable int id) {
+        User user = userService.retrieve(id);
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-        try {
-            User updated = userService.updateUserByuserId(updatedUser, id);
-            return ResponseEntity.ok(updated);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @GetMapping
+    public ResponseEntity<List<User>> retrieveAll() {
+        List<User> users = userService.retrieveAll();
+        return ResponseEntity.ok(users);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
+        User updatedUser = userService.update(user, id);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") int userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.ok("✅ User deleted successfully!");
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<User> search(@RequestParam(required = false) String emailId,
+                                       @RequestParam(required = false) String mobileNumber) {
+        User user = null;
+        if (emailId != null) {
+            user = userService.searchByEmailId(emailId);
+        } else if (mobileNumber != null) {
+            user = userService.searchByMobileNumber(mobileNumber);
+        }
+        return ResponseEntity.ok(user);
     }
 }

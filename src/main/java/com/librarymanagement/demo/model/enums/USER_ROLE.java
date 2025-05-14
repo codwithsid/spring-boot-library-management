@@ -1,4 +1,4 @@
-package com.librarymanagement.demo.model;
+package com.librarymanagement.demo.model.enums;
 
 public enum USER_ROLE {
     ROLE_CUSTOMER,   // Regular library users

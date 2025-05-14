@@ -18,40 +18,30 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address createAddress(Address address) {
+    public Address save(Address address) {
         return addressRepository.save(address);
     }
 
     @Override
-    public Address getAddressById(int id) {
+    public Address retrieve(int id) {
         return addressRepository.findById(id)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found with ID: " + id));
     }
 
     @Override
-    public List<Address> getAllAddresses() {
+    public List<Address> retrieveAll() {
         return addressRepository.findAll();
     }
 
     @Override
-    public Address updateAddress(int id, Address updatedAddress) {
-        Address existing = addressRepository.findById(id)
-                .orElseThrow(() -> new AddressNotFoundException("Cannot update. Address not found with ID: " + id));
-
-        existing.setStreet(updatedAddress.getStreet());
-        existing.setCity(updatedAddress.getCity());
-        existing.setState(updatedAddress.getState());
-        existing.setCountry(updatedAddress.getCountry());
-        existing.setPostalCode(updatedAddress.getPostalCode());
-        existing.setLandmark(updatedAddress.getLandmark());
-        existing.setAddressType(updatedAddress.getAddressType());
-        existing.setUser(updatedAddress.getUser());
-
-        return addressRepository.save(existing);
+    public Address update(Address updatedAddress) {
+        if(!addressRepository.existsById(updatedAddress.getAddressId()))
+            throw new AddressNotFoundException("Address not found");
+        return addressRepository.save(updatedAddress);
     }
 
     @Override
-    public void deleteAddress(int id) {
+    public void delete(int id) {
         if (!addressRepository.existsById(id)) {
             throw new AddressNotFoundException("Cannot delete. Address not found with ID: " + id);
         }

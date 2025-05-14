@@ -1,25 +1,59 @@
 package com.librarymanagement.demo.service.impl;
 
+import com.librarymanagement.demo.exception.bookException.BookNotFoundException;
 import com.librarymanagement.demo.exception.transactionException.TransactionNotFoundException;
+import com.librarymanagement.demo.exception.userException.UserNotFoundException;
+import com.librarymanagement.demo.model.Book;
 import com.librarymanagement.demo.model.Transactions;
+import com.librarymanagement.demo.model.User;
+import com.librarymanagement.demo.repository.BookRepository;
 import com.librarymanagement.demo.repository.TransactionsRepository;
+import com.librarymanagement.demo.repository.UserRepository;
 import com.librarymanagement.demo.service.TransactionsService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class TransactionsServiceImpl implements TransactionsService {
 
     private final TransactionsRepository transactionsRepository;
+    private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
-    public TransactionsServiceImpl(TransactionsRepository transactionsRepository) {
+    public TransactionsServiceImpl(TransactionsRepository transactionsRepository,
+                                   BookRepository bookRepository,
+                                   UserRepository userRepository) {
         this.transactionsRepository = transactionsRepository;
+        this.bookRepository = bookRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Transactions createTransaction(Transactions transaction) {
-        return transactionsRepository.save(transaction);
+        // Validate book
+        Book book = bookRepository.findById(transaction.getBook().getBookId())
+                .orElseThrow(() -> new BookNotFoundException("Book not found with ID: " + transaction.getBook().getBookId()));
+
+        // Validate user
+        User user = userRepository.findById(transaction.getUser().getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + transaction.getUser().getUserId()));
+
+        // Set validated entities
+        transaction.setBook(book);
+        transaction.setUser(user);
+        transaction.setBorrowDate(LocalDateTime.now());
+        transaction.setReturned(false);
+
+        // Save transaction
+        Transactions savedTransaction = transactionsRepository.save(transaction);
+
+        // Increment borrow count of the book
+        book.setBorrowCount(book.getBorrowCount() + 1);
+        bookRepository.save(book);
+
+        return savedTransaction;
     }
 
     @Override
