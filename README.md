@@ -200,75 +200,163 @@ classDiagram
   class User {
     +int userId
     +String firstName
+    +String lastName
     +String emailId
-    +List~Address~ addresses
-    +List~Transaction~ transactions
-    +List~Review~ reviews
+    +String password
+    +String mobileNumber
+    +LocalDate dob
+    +LocalDateTime createdAt
+    +boolean isActive
+    +String role
+    +String profileImageUrl
+  }
+
+  class Address {
+    +int addressId
+    +String street
+    +String city
+    +String state
+    +String country
+    +String postalCode
+    +String landmark
+    +String addressType
   }
 
   class Book {
     +int bookId
     +String title
-    +Author author
-    +BookPublisher publisher
+    +String isbn
+    +LocalDateTime publishDate
+    +int totalCopies
+    +int availableCopies
+    +String category
+    +String language
+    +double price
     +boolean isAvailable
-    +List~Review~ reviews
-    +List~Transaction~ transactions
+    +int borrowCount
+    +LocalDateTime returnDate
+    +LocalDateTime borrowDate
   }
 
   class Author {
     +int authorId
     +String firstName
-    +List~Book~ books
+    +String lastName
+    +LocalDate birthDate
+    +String nationality
+    +String biography
   }
 
   class BookPublisher {
     +int publisherId
     +String name
-    +Address address
-    +List~Book~ publishedBooks
-  }
-
-  class Address {
-    +int addressId
-    +String city
-    +String country
+    +String contactNumber
+    +String website
   }
 
   class Transaction {
     +int transactionId
-    +User user
-    +Book book
+    +LocalDateTime borrowDate
+    +LocalDateTime returnDate
     +boolean isReturned
   }
 
   class Billing {
     +int billingId
     +double amount
-    +User user
-    +Book book
+    +LocalDateTime date
+    +String paymentMethod
+    +boolean isPaid
+  }
+
+  class Reservation {
+    +int reservationId
+    +LocalDateTime reservationDate
+    +LocalDateTime expiryDate
+    +boolean fulfilled
+    +Status status
   }
 
   class Review {
     +int reviewId
+    +double rating
     +String comment
-    +ReviewSource source
+    +boolean isVerified
+    +ReviewType reviewType
+    +ReviewSource reviewSource
   }
 
+  class Recommendation {
+    +int recommendationId
+    +String reason
+    +Source source
+    +LocalDateTime createdAt
+  }
+
+  class Notification {
+    +int notificationId
+    +String title
+    +String message
+    +boolean isRead
+    +String notificationType
+    +LocalDateTime sentAt
+    +DeliveryChannel deliveryChannel
+  }
+
+  class Analytics {
+    +int analyticsId
+    +EntityType entityType
+    +int entityId
+    +int viewCount
+    +int borrowCount
+    +int ratingCount
+    +double averageRating
+    +LocalDateTime createdAt
+    +LocalDateTime lastUpdated
+  }
+
+  class Store {
+    +int storeId
+    +String name
+    +String contactNumber
+    +String email
+  }
+
+  %% Relationships
   User --> Address
   User --> Transaction
+  User --> Reservation
   User --> Review
+  User --> Notification
+  User --> Recommendation
+  User --> Billing
+
   Book --> Author
   Book --> BookPublisher
   Book --> Transaction
+  Book --> Reservation
   Book --> Review
+  Book --> Recommendation
+  Book --> Billing
+
   BookPublisher --> Address
-  Transaction --> Book
-  Transaction --> User
-  Billing --> User
-  Billing --> Book
+  Store --> Address
+
   Review --> Book
-  Review --> User
+  Review --> Author
+  Review --> Store
+
+  Reservation --> Book
+  Reservation --> User
+
+  Recommendation --> Book
+  Recommendation --> User
+
+  Notification --> User
+  Analytics --> Book
+  Analytics --> Author
+  Analytics --> Store
+
 ```
 
 ---
