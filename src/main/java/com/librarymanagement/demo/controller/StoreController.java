@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api.library-management.com/v1/store")
+@RequestMapping("/api/library-management/v1/store")
 public class StoreController {
 
     private static final Logger logger = (Logger) LoggerFactory.getLogger(StoreController.class);

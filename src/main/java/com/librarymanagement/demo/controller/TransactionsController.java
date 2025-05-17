@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api.library-management.com/v1/transaction")
+@RequestMapping("/api/library-management/v1/transaction")
 public class TransactionsController {
 
     private static final Logger logger = (Logger) LoggerFactory.getLogger(TransactionsController.class);

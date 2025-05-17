@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api.library-management.com/v1/publisher")
+@RequestMapping("/api/library-management/v1/publisher")
 public class BookPublisherController {
 
     private static final Logger logger = (Logger) LoggerFactory.getLogger(BookPublisherController.class);
