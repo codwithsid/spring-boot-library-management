@@ -298,7 +298,7 @@ classDiagram
 
 **Sidhhant Bhore**
 Java Backend Developer
-[LinkedIn](https://www.linkedin.com/in/sidhhantbhore) | [GitHub](https://github.com/sidhhantbhore)
+[LinkedIn](https://www.linkedin.com/in/siddhantbhore4645/) | [GitHub](https://github.com/codwithsid)
 
 ---
 
